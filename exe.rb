@@ -1,7 +1,11 @@
 # coding: utf-8
-p "まだできてないよ！！！"
+
+p "最初の一歩だよ！！"
 
 require 'dxruby'
+require './Tools/DataTableFactory.rb'
+
+p DataTableFactory.load("C:/Users/suzuki/Documents/GitHub/practice/Data/Output/Character")
 
 Window.loop do
   # ここにゲームの処理を書く 

@@ -1,17 +1,28 @@
 module DataTableFactory
 	require 'csv'
+	Dir[File.expand_path('../../Source/DataClass/Record', __FILE__) << '/*.rb'].each do |file|
+		require_relative file
+	end
 	def self.create(input_csv)
-		ret = []
+		ret = {}
 		csv = CSV.table(input_csv)
-		csv.each do |data|
-			ret << data.to_h
+		tag = File.basename(input_csv,".*").capitalize
+		
+		begin
+			my_class = eval "#{tag}"
+			csv.each do |data|
+				tmp = data.to_h
+				ret.store(tmp[:id], my_class.new(tmp))
+			end
+		rescue
+			#nothing to do
 		end
 		return ret
 	end
 	
 	def self.dump(file_name, output_path)
 		tmp = self.create(file_name)
-		file = File.open(output_path+"/#{File.basename(file_name,".*")}", "w+")
+		file = File.open(output_path+"/#{File.basename(file_name,".*").capitalize}", "w+")
 		Marshal.dump(tmp, file)
 		file.rewind
 	end
