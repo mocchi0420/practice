@@ -1,6 +1,6 @@
 module DataTableFactory
 	require 'csv'
-	Dir[File.expand_path('../../Source/DataClass/Record', __FILE__) << '/*.rb'].each do |file|
+	Dir[File.expand_path('../../Source/DataClass/', __FILE__) << '/*.rb'].each do |file|
 		require_relative file
 	end
 	def self.create(input_csv)
