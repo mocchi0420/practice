@@ -54,14 +54,6 @@ describe "Bowling game" do
 			expect(@mygame.instance_exec{@frame}).to eq(0)
 		end
 		
-		it "we can get right 20 throws getting 1pin at 1game" do
-			20.times do
-				@mygame.roll(1)
-			end
-			expect(@mygame.instance_exec{@result}).to eq([[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1,0]])
-			expect(@mygame.instance_exec{@frame}).to eq(10)
-		end
-
 		it "we can get right 20 throws getting strike at 1game" do
 			20.times do
 				@mygame.roll(10)
@@ -150,7 +142,7 @@ describe "Bowling game" do
 			end
 			ret = @mygame.score
 			expect(@mygame.instance_exec{@result}).to eq([[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0]])
-			expect(@mygame.instance_exec{@score}).to eq([30,30,30,30,30,30,30,0,0])
+			expect(@mygame.instance_exec{@score}).to eq([30,30,30,30,30,30,30,nil,nil])
 			expect(ret).to eq(210)
 		end
 		
@@ -177,6 +169,26 @@ describe "Bowling game" do
 			ret = @mygame.score
 			expect(@mygame.instance_exec{@result}).to eq([[6,3],[9,0],[0,3],[8,2],[7,3],[10,0],[9,1],[8,0],[10,0],[10,6,4]])
 			expect(ret).to eq(150)
+		end
+		
+		it "we can get right 20 throws getting 1pin at 1game" do
+			20.times do
+				@mygame.roll(1)
+			end
+			ret = @mygame.score
+			expect(@mygame.instance_exec{@result}).to eq([[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1,0]])
+			expect(@mygame.instance_exec{@frame}).to eq(10)
+			expect(ret).to eq(20)
+		end
+		
+		it "we can get right 20 throws getting 0pin at 1game" do
+			20.times do
+				@mygame.roll(0)
+			end
+			ret = @mygame.score
+			expect(@mygame.instance_exec{@result}).to eq([[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0,0]])
+			expect(@mygame.instance_exec{@frame}).to eq(10)
+			expect(ret).to eq(0)
 		end
 		
 	end

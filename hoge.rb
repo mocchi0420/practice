@@ -55,20 +55,20 @@ class Game
 			ret = 0			
 			if @result[idx] == [10,0]
 				case @strike_count
-					when 0 then ret = (@frame - idx > 1) ? (@result[idx+1][0..1].inject(:+) + @result[idx].inject(:+)) : 0
-					when 1 then ret = (@frame - idx > 2) ? (@result[idx+2][0] + @result[idx..(idx+1)].flatten!.inject(:+)) : 0
-					when 2 then ret = (@frame - idx > 2) ? 30 : 0
+					when 0 then ret = (@frame - idx > 1) ? (@result[idx+1][0..1].inject(:+) + @result[idx].inject(:+)) : nil
+					when 1 then ret = (@frame - idx > 2) ? (@result[idx+2][0] + @result[idx..(idx+1)].flatten!.inject(:+)) : nil
+					when 2 then ret = (@frame - idx > 2) ? 30 : nil
 				end
 				@strike_count += 1 if @strike_count < 2
 			elsif @result[idx].inject(:+) == 10
-				 ret = (@frame != idx) ? (@result[idx+1][0]+@result[idx].inject(:+)) : 0
+				 ret = (@frame != idx) ? (@result[idx+1][0]+@result[idx].inject(:+)) : nil
 			else
 				 ret = @result[idx].inject(:+)
 			end
 			@strike_count = 0 if @result[idx] != [10,0]
 			@score.unshift(ret)
 		end
-		return @score.inject(:+)
+		return @score.select{|e| e != nil}.inject(:+)
 	end
 
 end
