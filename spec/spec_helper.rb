@@ -13,6 +13,15 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+
+# configuration of simplecov(2018/03/04)
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter ['vendor/', 'spec/']
+end
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
