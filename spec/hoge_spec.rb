@@ -178,7 +178,6 @@ describe "Bowling game" do
 			@mygame.roll(9)
 			@mygame.roll(1)
 			@mygame.roll(10)
-=begin
 			@mygame.roll(5)
 			@mygame.roll(0)
 
@@ -192,9 +191,8 @@ describe "Bowling game" do
 			@mygame.roll(6)
 			@mygame.roll(4)
 			@mygame.roll(10)
-=end
 			ret = @mygame.score
-#			expect(@mygame.instance_exec{@result}).to eq([[8,2],[9,1],[10,0],[5,0],[10,0],[10,0],[3,6],[10,0],[7,0],[6,4,10]])
+			expect(@mygame.instance_exec{@result}).to eq([[8,2],[9,1],[10,0],[5,0],[10,0],[10,0],[3,6],[10,0],[7,0],[6,4,10]])
 			expect(ret).to eq(39)
 		end
 		
