@@ -146,7 +146,7 @@ describe "Bowling game" do
 			expect(ret).to eq(210)
 		end
 		
-		it "we can get right result at testgame" do
+		it "we can get right score at testgame1" do
 			@mygame.roll(6)
 			@mygame.roll(3)
 			@mygame.roll(9)
@@ -169,6 +169,52 @@ describe "Bowling game" do
 			ret = @mygame.score
 			expect(@mygame.instance_exec{@result}).to eq([[6,3],[9,0],[0,3],[8,2],[7,3],[10,0],[9,1],[8,0],[10,0],[10,6,4]])
 			expect(ret).to eq(150)
+		end
+		
+		it "we can get right score at testgame2" do
+			@mygame.roll(8)
+			@mygame.roll(2)
+			@mygame.roll(9)
+			@mygame.roll(1)
+			@mygame.roll(10)
+			@mygame.roll(5)
+			@mygame.roll(0)
+			@mygame.roll(10)
+			@mygame.roll(10)
+			@mygame.roll(3)
+			@mygame.roll(6)
+			@mygame.roll(10)
+			@mygame.roll(7)
+			@mygame.roll(0)
+			@mygame.roll(6)
+			@mygame.roll(4)
+			@mygame.roll(10)
+			ret = @mygame.score
+			expect(@mygame.instance_exec{@result}).to eq([[8,2],[9,1],[10,0],[5,0],[10,0],[10,0],[3,6],[10,0],[7,0],[6,4,10]])
+			expect(ret).to eq(154)
+		end
+		
+		it "we can get right score at testgame3" do
+			@mygame.roll(0)
+			@mygame.roll(0)
+			@mygame.roll(10)
+			@mygame.roll(8)
+			@mygame.roll(2)
+			@mygame.roll(10)
+			@mygame.roll(10)
+			@mygame.roll(10)
+			@mygame.roll(5)
+			@mygame.roll(3)
+			@mygame.roll(8)
+			@mygame.roll(2)
+			@mygame.roll(10)
+			@mygame.roll(10)
+			@mygame.roll(10)
+			@mygame.roll(10)
+			@mygame.roll(10)
+			ret = @mygame.score
+			expect(@mygame.instance_exec{@result}).to eq([[0,0],[10,0],[8,2],[10,0],[10,0],[10,0],[5,3],[8,2],[10,0],[10,10,10]])
+			expect(ret).to eq(201)
 		end
 		
 		it "we can get right 20 throws getting 1pin at 1game" do

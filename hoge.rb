@@ -32,7 +32,7 @@ class Game
 			roll_num = 2	#最終フレームまでは2投
 		else
 			@current_result << 0 if @current_result.inject(:+) < 10 && @current_result.length == 2
-			roll_num = 3	#最終フレームは1投
+			roll_num = 3	#最終フレームは3投
 		end
 		
 		if @current_result.length == roll_num
@@ -46,26 +46,26 @@ class Game
 	
 	def score
 		return 0 if @frame == 0
-		(@frame-1).downto(0) do |idx|
-			if idx == GAME_FRAME
-				@score.unshift(@result[idx]).flatten!
+		(@frame-1).downto(0) do |current_frame|
+			if current_frame == GAME_FRAME
+				@score.unshift(@result[current_frame]).flatten!
 				next
 			end
 			
 			ret = 0			
-			if @result[idx] == [PIN_NUM,0]
+			if @result[current_frame] == [PIN_NUM,0]
 				case @strike_count
-					when 0 then ret = (@frame - idx > 1) ? (@result[idx+1][0..1].inject(:+) + @result[idx].inject(:+)) : nil
-					when 1 then ret = (@frame - idx > 2) ? (@result[idx+2][0] + @result[idx..(idx+1)].flatten!.inject(:+)) : nil
-					when 2 then ret = (@frame - idx > 2) ? PIN_NUM*3 : nil
+					when 0 then ret = (@frame - current_frame > 1) ? (@result[current_frame+1][0..1].inject(:+) + @result[current_frame].inject(:+)) : nil
+					when 1 then ret = (@frame - current_frame > 2) ? (@result[current_frame+2][0] + @result[current_frame..(current_frame+1)].flatten!.inject(:+)) : nil
+					when 2 then ret = (@frame - current_frame > 2) ? PIN_NUM*3 : nil
 				end
 				@strike_count += 1 if @strike_count < 2
-			elsif @result[idx].inject(:+) == PIN_NUM
-				 ret = (@frame != idx) ? (@result[idx+1][0]+@result[idx].inject(:+)) : nil
+			elsif @result[current_frame].inject(:+) == PIN_NUM
+				 ret = (@frame != current_frame) ? (@result[current_frame+1][0]+@result[current_frame].inject(:+)) : nil
 			else
-				 ret = @result[idx].inject(:+)
+				 ret = @result[current_frame].inject(:+)
 			end
-			@strike_count = 0 if @result[idx] != [PIN_NUM,0]
+			@strike_count = 0 if @result[current_frame] != [PIN_NUM,0]
 			@score.unshift(ret)
 		end
 		return @score.select{|e| e != nil}.inject(:+)
