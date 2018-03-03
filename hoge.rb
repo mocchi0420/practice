@@ -47,28 +47,45 @@ class Game
 	def score
 		return 0 if @frame == 0
 		(@frame-1).downto(0) do |current_frame|
-			if current_frame == GAME_FRAME
+			if current_frame == GAME_FRAME #最終フレームは足し算だけ
 				@score.unshift(@result[current_frame]).flatten!
 				next
 			end
-			
-			ret = 0			
 			if @result[current_frame] == [PIN_NUM,0]
-				case @strike_count
-					when 0 then ret = (@frame - current_frame > 1) ? (@result[current_frame+1][0..1].inject(:+) + @result[current_frame].inject(:+)) : nil
-					when 1 then ret = (@frame - current_frame > 2) ? (@result[current_frame+2][0] + @result[current_frame..(current_frame+1)].flatten!.inject(:+)) : nil
-					when 2 then ret = (@frame - current_frame > 2) ? PIN_NUM*3 : nil
-				end
-				@strike_count += 1 if @strike_count < 2
-			elsif @result[current_frame].inject(:+) == PIN_NUM
-				 ret = (@frame != current_frame) ? (@result[current_frame+1][0]+@result[current_frame].inject(:+)) : nil
+				mode = :strike
 			else
-				 ret = @result[current_frame].inject(:+)
+				mode = :normal
+				mode = :spare if @result[current_frame].inject(:+) == PIN_NUM
 			end
-			@strike_count = 0 if @result[current_frame] != [PIN_NUM,0]
-			@score.unshift(ret)
+			@score.unshift(send("calc_#{mode}_score", current_frame))
+			if @result[current_frame] == [PIN_NUM,0]
+				@strike_count += 1 if @strike_count < 2
+			else
+				@strike_count = 0
+			end
 		end
 		return @score.select{|e| e != nil}.inject(:+)
 	end
+	
+	def calc_normal_score(frame)
+		return @result[frame].inject(:+)
+	end
+	
+	def calc_spare_score(frame)
+		if @frame != frame
+			return @result[frame+1][0] + @result[frame].inject(:+)
+		else
+			return nil
+		end
+	end
 
+	def calc_strike_score(frame)
+		ret = nil
+		ret = case @strike_count 
+			when 0 then (@result[frame+1][0..1].inject(:+) + @result[frame].inject(:+)) if (@frame - frame > 1)
+			when 1 then (@result[frame+2][0] + @result[frame..(frame+1)].flatten!.inject(:+)) if (@frame - frame > 2)
+			when 2 then PIN_NUM*3 if (@frame - frame > 2)
+		end
+		return ret
+	end
 end
