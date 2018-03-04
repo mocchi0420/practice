@@ -23,6 +23,7 @@ class Game
 			end
 		end
 		return true
+		
 	end
 
 	def roll(pins)
