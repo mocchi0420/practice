@@ -1,5 +1,5 @@
 class Record
-	def initialize(my_hash={})
+	def initialize(my_hash={}, type_list={})
 		my_hash.each do |data|
 			#dataは必ず[:key, value]で渡される
 			var = "@"+data[0].to_s	

@@ -1,4 +1,5 @@
 id,name,level,effect,memo
+Interger,String,Interger,Interger,String
 10001,hoge,1,1,hoge
 10002,foo,2,2,foo
 10003,bar,3,3,bar

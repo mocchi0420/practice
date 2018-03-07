@@ -10,9 +10,13 @@ module DataTableFactory
 		
 		begin
 			my_class = eval "#{tag}"
-			csv.each do |data|
+			csv.each_with_index do |data, i|
+				if i == 0
+					type_list = data.to_h
+					next
+				end
 				tmp = data.to_h
-				ret.store(tmp[:id], my_class.new(tmp))
+				ret.store(tmp[:id], my_class.new(tmp, type_list))
 			end
 		rescue
 			#nothing to do

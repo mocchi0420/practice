@@ -1,4 +1,5 @@
 id,name,level,hp,attack,deffense
+Interger,String,Interger,Interger,Interger,Interger
 10001,hoge,1,20,7,5
 10002,foo,2,30,8,5
 10003,bar,3,40,9,5
