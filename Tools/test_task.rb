@@ -1,6 +1,6 @@
-require "./DataTableFactory.rb"
+require_relative "./DataTableFactory.rb"
 
-MYGAME_PATH = File.expand_path("..")
+MYGAME_PATH = File.expand_path("..", __dir__)
 MASTER_PATH = MYGAME_PATH+"/Data/Master"
 OUTPUT_PATH = MYGAME_PATH+"/Data/output"
 
