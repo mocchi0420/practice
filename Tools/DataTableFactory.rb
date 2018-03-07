@@ -7,19 +7,20 @@ module DataTableFactory
 		ret = {}
 		csv = CSV.table(input_csv)
 		tag = File.basename(input_csv,".*").capitalize
+		type_list = {}
 		
 		begin
 			my_class = eval "#{tag}"
 			csv.each_with_index do |data, i|
 				if i == 0
-					type_list = data.to_h
-					next
+					type_list = data.to_h.inject( {} ){ |a,(k,v)| a[k]=v;a }
+				else
+					tmp = data.to_h
+					ret.store(tmp[:id], my_class.new(tmp, type_list))
 				end
-				tmp = data.to_h
-				ret.store(tmp[:id], my_class.new(tmp, type_list))
 			end
-		rescue
-			#nothing to do
+		rescue => e
+			puts e
 		end
 		return ret
 	end

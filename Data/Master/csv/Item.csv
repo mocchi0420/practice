@@ -1,6 +1,6 @@
-id,name,level,effect,memo
-Interger,String,Interger,Interger,String
-10001,hoge,1,1,hoge
-10002,foo,2,2,foo
-10003,bar,3,3,bar
-10004,piyo,4,4,piyo
+id,name,level,effect,memo,test2
+Interger,String,Interger,Interger,String,String[]
+10001,hoge,1,1,hoge,"[a,b,c,d,e]"
+10002,foo,2,2,foo,"[a,b,c,d]"
+10003,bar,3,3,bar,"[a,b,c]"
+10004,piyo,4,4,piyo,"[a,b]"

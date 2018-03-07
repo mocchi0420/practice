@@ -1,6 +1,6 @@
-id,name,level,hp,attack,deffense
-Interger,String,Interger,Interger,Interger,Interger
-10001,hoge,1,20,7,5
-10002,foo,2,30,8,5
-10003,bar,3,40,9,5
-10004,piyo,4,50,10,5
+id,name,level,hp,attack,deffense,test1,test2
+Interger,String,Interger,Interger,Interger,Interger,Interger[],json
+10001,hoge,1,20,7,5,"[1,2]","{""ruby"":{""rails"":30000},""python"":{""django"":25000}}"
+10002,foo,2,30,8,5,"[1,2,3]","{""ruby"":{""rails"":30000},""python"":{""django"":25000}}"
+10003,bar,3,40,9,5,"[1,2,3,4]","{""ruby"":{""rails"":30000},""python"":{""django"":25000}}"
+10004,piyo,4,50,10,5,"[1,2,3,4,5]","{""ruby"":{""rails"":30000},""python"":{""django"":25000}}"
