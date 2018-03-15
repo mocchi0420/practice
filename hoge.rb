@@ -10,26 +10,30 @@ class Game
 	end
 
 	def roll_check(pins)
-		return false if @frame > GAME_FRAME
-		return false if pins.to_s !~ /\A[0-9]+\z/ || pins > PIN_NUM
-		
-		if @frame < GAME_FRAME
-			return false if (@current_result.length >= 1) && @current_result.inject(:+) + pins > PIN_NUM
-		else
+		raise IndexError.new("invalid index!") if @frame > GAME_FRAME || pins.to_s !~ /\A[0-9]+\z/ || pins > PIN_NUM
+		if @frame == GAME_FRAME
 			case @current_result.length
-			when 0 then return false if pins > 10
-			when 1 then return false if (@current_result[0] == 10 && pins > PIN_NUM) || (@current_result[0] != 10 && @current_result[0] + pins > PIN_NUM)
-			when 2 then return false if (@current_result[0..1].inject(:+) == 20 && pins > PIN_NUM) || (@current_result[0] == 10 && @current_result[1] != 10 && @current_result[1] + pins > PIN_NUM)
+			when 0 then raise IndexError.new("invalid index!") if pins > 10
+			when 1 then raise IndexError.new("invalid index!") if (@current_result[0] == 10 && pins > PIN_NUM) || (@current_result[0] != 10 && @current_result[0] + pins > PIN_NUM)
+			when 2 then raise IndexError.new("invalid index!") if (@current_result[0..1].inject(:+) == 20 && pins > PIN_NUM) || (@current_result[0] == 10 && @current_result[1] != 10 && @current_result[1] + pins > PIN_NUM)
 			end
+		else
+			raise IndexError.new("invalid index!") if (@current_result.length >= 1) && @current_result.inject(:+) + pins > PIN_NUM
 		end
-		return true
-		
+		return pins
 	end
 
 	def roll(pins)
-		return false if roll_check(pins) == false
-		@current_result << pins
-		
+		begin
+			@current_result << roll_check(pins)
+		rescue
+			if @frame > GAME_FRAME
+				raise IndexError.new("game ended!")
+			else
+				raise IndexError.new("invalid index!")
+			end
+		end
+
 		if @frame < GAME_FRAME
 			@current_result << 0 if @current_result == [PIN_NUM]
 			roll_num = 2	#最終フレームまでは2投

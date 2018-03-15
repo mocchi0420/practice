@@ -46,12 +46,12 @@ describe "Bowling game" do
 		end
 		
 		it "we cannot get over 10 pins at 1 throw" do
-			expect(mygame.roll(11)).to eq(false)
+			expect{mygame.roll(11)}.to raise_error(IndexError, "invalid index!")
 		end
 		
 		it "we cannot get over 10 pins at 1 round" do
 			mygame.roll(3)
-			mygame.roll(8)
+			expect{mygame.roll(8)}.to raise_error(IndexError, "invalid index!")
 			expect(mygame.instance_exec{@current_result}).to eq([3])
 			expect(mygame.instance_exec{@result}).to eq([])
 			expect(mygame.instance_exec{@frame}).to eq(0)
@@ -61,15 +61,16 @@ describe "Bowling game" do
 			9.times do
 				mygame.roll(10)
 			end
-			expect(mygame.roll(11)).to eq(false)
+
+			expect{mygame.roll(11)}.to raise_error(IndexError, "invalid index!")
 			mygame.roll(3)
-			mygame.roll(8)
+			expect{mygame.roll(8)}.to raise_error(IndexError, "invalid index!")
 			expect(mygame.instance_exec{@current_result}).to eq([3])
 			expect(mygame.instance_exec{@frame}).to eq(9)
 			mygame.roll(7)
-			expect(mygame.roll(11)).to eq(false)
+			expect{mygame.roll(11)}.to raise_error(IndexError, "invalid index!")
 			expect(mygame.instance_exec{@frame}).to eq(9)
-			expect(mygame.roll(11)).to eq(false)
+			expect{mygame.roll(11)}.to raise_error(IndexError, "invalid index!")
 			mygame.roll(0)
 			expect(mygame.instance_exec{@frame}).to eq(10)
 		end
@@ -78,9 +79,9 @@ describe "Bowling game" do
 			10.times do
 				mygame.roll(10)
 			end
-			expect(mygame.roll(11)).to eq(false)
+			expect{mygame.roll(11)}.to raise_error(IndexError, "invalid index!")
 			mygame.roll(3)
-			mygame.roll(8)
+			expect{mygame.roll(8)}.to raise_error(IndexError, "invalid index!")
 			expect(mygame.instance_exec{@current_result}).to eq([10,3])
 			expect(mygame.instance_exec{@frame}).to eq(9)
 			mygame.roll(7)
@@ -91,7 +92,7 @@ describe "Bowling game" do
 			11.times do
 				mygame.roll(10)
 			end
-			expect(mygame.roll(11)).to eq(false)
+			expect{mygame.roll(11)}.to raise_error(IndexError, "invalid index!")
 			mygame.roll(10)
 			expect(mygame.instance_exec{@frame}).to eq(10)
 		end
@@ -105,19 +106,22 @@ describe "Bowling game" do
 			expect(mygame.instance_exec{@frame}).to eq(10)
 		end		
 		
-		it "we can get right 20 throws getting strike at 1game" do
-			20.times do
+		it "we can get right 12 throws getting strike at 1game" do
+			12.times do
 				mygame.roll(10)
 			end
+			expect{mygame.roll(10)}.to raise_error(IndexError, "game ended!")
 			expect(mygame.instance_exec{@result}).to eq([[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,10,10]])
 			expect(mygame.instance_exec{@frame}).to eq(10)
 		end
 		
 		it "we can get right 20 throws getting spare at 1game" do
-			20.times do
+			10.times do
 				mygame.roll(0)
 				mygame.roll(10)
 			end
+			mygame.roll(0)
+			expect{mygame.roll(10)}.to raise_error(IndexError, "game ended!")
 			expect(mygame.instance_exec{@result}).to eq([[0,10],[0,10],[0,10],[0,10],[0,10],[0,10],[0,10],[0,10],[0,10],[0,10,0]])
 			expect(mygame.instance_exec{@frame}).to eq(10)
 		end
@@ -259,7 +263,6 @@ describe "Bowling game" do
 			mygame.roll(3)
 			mygame.roll(8)
 			mygame.roll(2)
-			mygame.roll(10)
 			mygame.roll(10)
 			mygame.roll(10)
 			mygame.roll(10)
