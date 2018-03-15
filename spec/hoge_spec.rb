@@ -2,7 +2,7 @@ require_relative '../hoge'
 
 describe "Bowling game" do
 	# 初期設定
-	let(:mygame) {Game.new}
+	let(:mygame) {BowlingGame.new}
 	before do
 		#nothing to do
 	end
@@ -13,11 +13,11 @@ describe "Bowling game" do
 		end	
 		
 		it "we can check default result" do
-			expect(mygame.instance_exec{@score}).to eq([])
+			expect(mygame.get_score_list).to eq([])
 		end
 		
 		it "we can check default score" do
-			expect(mygame.instance_exec{@score}).to eq([])
+			expect(mygame.score).to eq(0)
 		end
 		
 		it "we can check 0 frame" do
@@ -177,7 +177,7 @@ describe "Bowling game" do
 			mygame.roll(10)
 			ret = mygame.score
 			expect(mygame.instance_exec{@result}).to eq([[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[10,10,10]])
-			expect(mygame.instance_exec{@score}).to eq([0,0,0,0,0,0,0,0,0,10,10,10])
+			expect(mygame.get_score_list).to eq([0,0,0,0,0,0,0,0,0,10,10,10])
 			expect(ret).to eq(30)
 		end
 		
@@ -187,7 +187,7 @@ describe "Bowling game" do
 			end
 			ret = mygame.score
 			expect(mygame.instance_exec{@result}).to eq([[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,10,10]])
-			expect(mygame.instance_exec{@score}).to eq([30,30,30,30,30,30,30,30,30,10,10,10])
+			expect(mygame.get_score_list).to eq([30,30,30,30,30,30,30,30,30,10,10,10])
 			expect(ret).to eq(300)
 		end
 		
@@ -197,7 +197,7 @@ describe "Bowling game" do
 			end
 			ret = mygame.score
 			expect(mygame.instance_exec{@result}).to eq([[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0],[10,0]])
-			expect(mygame.instance_exec{@score}).to eq([30,30,30,30,30,30,30,nil,nil])
+			expect(mygame.get_score_list).to eq([30,30,30,30,30,30,30,nil,nil])
 			expect(ret).to eq(210)
 		end
 		
