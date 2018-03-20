@@ -2,7 +2,7 @@ require_relative '../hoge'
 
 describe "Bowling game" do
 	# 初期設定
-	let(:mygame) {BowlingGame.new}
+	let(:mygame) {Game.new}
 	before do
 		#nothing to do
 	end

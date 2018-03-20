@@ -3,17 +3,19 @@ module BowlingConstants
 	PIN_NUM = 10
 end
 
-class BowlingGame
+class Game
 	include BowlingConstants
 	def initialize
 		@result = []
 		@current_result = []
 		@frame = 0
+		@my_roll = Roll.new
+		@my_score = Score.new
 	end
 
 	def roll(pins)
-		my_roll = BowlingRollManager.new(@frame)
-		@current_result << my_roll.roll(pins, @current_result)
+		@my_roll.update(@frame,@current_result)
+		@current_result << @my_roll.roll(pins)
 		return modify_result(get_roll_count)
 	end
 
@@ -23,11 +25,8 @@ class BowlingGame
 	end
 
 	def modify_result(roll_count)
-		if @frame == GAME_FRAME
-			@current_result << 0 if @current_result.inject(:+) < 10 && @current_result.length == 2
-		else
-			@current_result << 0 if @current_result == [PIN_NUM]
-		end
+		mode = (@frame == GAME_FRAME) ? "lastframe" : "normalframe"
+		@current_result << 0 if send("need_completion_#{mode}?") == true
 		
 		if @current_result.length == roll_count
 			@result << @current_result
@@ -37,9 +36,19 @@ class BowlingGame
 		return @result
 	end
 	
+	def need_completion_normalframe?
+		ret = (@current_result == [PIN_NUM]) ? true : false
+		return ret
+	end
+	
+	def need_completion_lastframe?
+		ret = (@current_result.inject(:+) < 10 && @current_result.length == 2) ? true : false
+		return ret
+	end
+	
 	def get_score_list
-		my_score = BowlingScoreManager.new(@frame, @result)
-		return my_score.score
+		@my_score.update(@frame, @result)
+		return @my_score.score
 	end
 	
 	def score
@@ -49,51 +58,64 @@ class BowlingGame
 	end
 end
 
-class BowlingRollManager
+class Roll
 	include BowlingConstants
 
-	def initialize(frame)
-		@frame = frame
+	def initialize
+		@frame = 0
+		@result = []
 	end
 	
-	def roll(pins, result)
+	def update(frame,result)
+		@frame = frame
+		@result = result
+	end	
+	
+	def roll(pins)
 		begin
 			raise if @frame > GAME_FRAME
 			mode = (@frame == GAME_FRAME) ? "lastframe" : "normalframe"
-			return send("roll_check_#{mode}", pins, result)
+			return send("roll_check_#{mode}", pins)
 		rescue
 			mes = (@frame > GAME_FRAME) ? "game ended!" : "invalid index!"
 			raise IndexError.new(mes)
 		end
 	end
 
-	def roll_check_normalframe(pins, result)
+	def roll_check_normalframe(pins)
 		raise IndexError.new("invalid index!") if pins.to_s !~ /\A[0-9]+\z/ || pins > PIN_NUM
-		raise IndexError.new("invalid index!") if (result.length >= 1) && result.inject(:+) + pins > PIN_NUM
+		raise IndexError.new("invalid index!") if (@result.length >= 1) && @result.inject(:+) + pins > PIN_NUM
 		return pins
 	end
 
-	def roll_check_lastframe(pins, result)
+	def roll_check_lastframe(pins)
 		raise IndexError.new("invalid index!") if pins.to_s !~ /\A[0-9]+\z/ || pins > PIN_NUM
-		case result.length
+		case @result.length
 			when 0 then raise IndexError.new("invalid index!") if pins > 10
-			when 1 then raise IndexError.new("invalid index!") if (result[0] == 10 && pins > PIN_NUM) || (result[0] != 10 && result[0] + pins > PIN_NUM)
-			when 2 then raise IndexError.new("invalid index!") if (result[0..1].inject(:+) == 20 && pins > PIN_NUM) || (result[0] == 10 && result[1] != 10 && result[1] + pins > PIN_NUM)
+			when 1 then raise IndexError.new("invalid index!") if (@result[0] == 10 && pins > PIN_NUM) || (@result[0] != 10 && @result[0] + pins > PIN_NUM)
+			when 2 then raise IndexError.new("invalid index!") if (@result[0..1].inject(:+) == 20 && pins > PIN_NUM) || (@result[0] == 10 && @result[1] != 10 && @result[1] + pins > PIN_NUM)
 		end
 		return pins
 	end
 	
 end
 
-class BowlingScoreManager
+class Score
 	include BowlingConstants
 
-	def initialize(frame, result)
-		@frame = frame
-		@result = result
+	def initialize
+		@frame = 0
+		@result = []
 		@score = []
 		@strike_count = 0
 	end
+	
+	def update(frame, result)
+		@score = []
+		@strike_count = 0
+		@frame = frame
+		@result = result
+	end	
 
 	def score
 		return [] if @frame == 0
