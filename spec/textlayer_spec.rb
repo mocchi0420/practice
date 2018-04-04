@@ -1,43 +1,38 @@
 # encoding: utf-8
 require_relative '../textlayer'
 require_relative '../Tools/Testdriver'
+require 'dxruby'
 
 describe "TextBox" do
 	# 初期設定
-	let(:textdrawer) {TextBoxManager.new("abcdefghijklmnopqrstuvwxyz")}
+	#let(:textdrawer) {MonoScript.new("abcdefghijklmnopqrstuvwxyz")}
 	
 	describe "draw animator" do
-		it "we can draw some str" do
+		it "textbox" do
 			expect(Testdriver.mainloop do |window|
-				textdrawer.on_draw(window)
-				textdrawer.on_move
+				font = Font.new(24, "ＭＳ ゴシック")
+				text = "あいうえおかきくけこ"
+				image = Image.new(640, 480, [0, 0, 0, 0])
+				tb = TextBoxProto2.new(image)
+				tb.set_text(text, font)
+				tb.set_window(100,100,window)
+				tb.draw
 			end).to be_truthy
 		end
-		
-		it "we can change skip mode:true" do
+
+		it "monoscript" do
 			expect(Testdriver.mainloop do |window|
-				textdrawer.on_draw(window)
-				textdrawer.set_skip_mode(true)
-				textdrawer.instance_exec{@config[:skip_flag]}
+				font = Font.new(24, "ＭＳ ゴシック")
+				text = "あいうえおかきくけこ"
+				image = Image.new(640, 480, [0, 0, 0, 0])
+				tb = TextBoxProto2.new(image)
+				tb.set_text(text, font)
+				tb.set_window(100,100,window)
+				ms = MonoScript.new(tb)
+				ms.on_move
 			end).to be_truthy
 		end
-		
-		it "we can change skip mode:false" do
-			expect(Testdriver.mainloop do |window|
-				textdrawer.on_draw(window)
-				textdrawer.set_skip_mode(true)
-				textdrawer.set_skip_mode(false)
-				textdrawer.instance_exec{@config[:skip_flag]}
-			end).to be_falsey
-		end
-		
-		it "we can draw some str with skipmode" do
-			expect(Testdriver.mainloop do |window|
-				textdrawer.on_draw(window)
-				textdrawer.set_skip_mode(true)
-				textdrawer.on_move
-			end).to be_truthy
-		end
+	
 	end
 	
 end
