@@ -1,0 +1,31 @@
+#1
+Window.loop内で作成したImageオブジェクトに文字を描画する場合に袋文字になるが、
+Window.loop外で作成したImageオブジェクトに文字を描画する場合には明示的に袋文字にしないと袋文字にできない。
+※逆に、Window.loop内で作成したImageオブジェクトに文字を描画する場合には{edge: false}を指定しても袋文字を解除できない問題となる。
+
+この挙動のため、「袋文字を使いたくない」パターンがありうる場合にはWindow.loop外でImageを作成しておく必要がある。
+
+#ex.1 エラーパターン
+font = Font.new(24, "ＭＳ ゴシック")
+image1 = Image.new(640, 480, [0, 0, 0, 0])
+Window.loop do
+	image2 = Image.new(640, 480, [0, 0, 0, 0])
+	Window.draw(0, 0,image1)
+	image1.draw_font_ex(0,0,"あいうえおかきくけこ",font)
+	Window.draw(0, 100,image2)
+	image2.draw_font_ex(0,0,"あいうえおかきくけこ",font)
+end
+#=>描画される文字の太さに差が生まれてしまう。
+
+#ex.2 回避策
+font = Font.new(24, "ＭＳ ゴシック")
+image1 = Image.new(640, 480, [0, 0, 0, 0])
+Window.loop do
+	image2 = Image.new(640, 480, [0, 0, 0, 0])
+	Window.draw(0, 0,image1)
+	image1.draw_font_ex(0,0,"あいうえおかきくけこ",font,{edge: true})	#オプションでedgeを指定してあげる
+	Window.draw(0, 100,image2)
+	image2.draw_font_ex(0,0,"あいうえおかきくけこ",font)
+end
+#=>描画時の結果が同じ状況になる
+

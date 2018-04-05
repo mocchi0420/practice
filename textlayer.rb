@@ -185,9 +185,8 @@ class TextBoxProto2
 	def draw_forscript
 		return false if @text == nil || @font == nil
 		str = @text[@text_counter, 1]
-		@image.draw_font_ex(@pos[:x], @pos[:y], str , @font)
+		@image.draw_font_ex(@pos[:x], @pos[:y], str , @font, @option)
 		@text_counter += 1
-		puts @text_counter
 		@pos_diff[:x] = (str.bytesize >= 2) ? @font.size : @font.size/2
 		@pos_diff[:y] = @font.size
 		@pos[:x] += @pos_diff[:x]
@@ -207,3 +206,18 @@ end
 
 
 
+
+font = Font.new(24, "ＭＳ ゴシック")
+image1 = DXRuby::Image.new(640, 480, [0, 0, 0, 0])
+
+Marshal.dump(image1)
+
+puts image1.class.ancestors
+
+Window.loop do
+	image2 = Image.new(640, 480, [0, 0, 0, 0])
+	Window.draw(0, 0,image1)
+	image1.draw_font_ex(0,0,"あいうえおかきくけこ",font,{edge: true})	#オプションでedgeを指定してあげる
+	Window.draw(0, 100,image2)
+	image2.draw_font_ex(0,0,"あいうえおかきくけこ",font)
+end
