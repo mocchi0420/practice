@@ -14,8 +14,9 @@ describe "TextBox" do
 				font = Font.new(24, "ＭＳ ゴシック")
 				text = "あいうえおかきくけこ"
 			image = Image.new(640, 480, [0, 0, 0, 0])
-				tb = TextBoxProto2.new(image)
-				tb.set_text(text, font)
+				tb = TextBox.new(image)
+				tb.set_text(text)
+				tb.set_font(font)
 				tb.set_window(100,100,window)
 				tb.draw
 			end).to be_truthy
@@ -25,11 +26,13 @@ describe "TextBox" do
 			font = Font.new(24, "ＭＳ ゴシック")
 			text = "あいうえおかきくけこ"
 			image = Image.new(640, 480, [0, 0, 0, 0])
-			tb = TextBoxProto2.new(image)
-			tb.set_text(text, font)
+			sb = MonoScript.new(image)
+			sb.set_text(text)
+			sb.set_font(font)
+			ms ||= ScriptController.new
+			ms.set_script(sb)
 			expect(Testdriver.mainloop do |window|
-				tb.set_window(100,100,window)
-				ms ||= MonoScript.new(tb)
+				ms.on_draw(100,100,window)
 				ms.on_move
 			end).to be_truthy
 		end
